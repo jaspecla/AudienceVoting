@@ -30,9 +30,22 @@ namespace AudienceVoting.Data
         }
       };
 
-      _cosmosDbClient = new(
-        accountEndpoint: configuration["CosmosDbEndpoint"],
-        tokenCredential: credential);
+      if (configuration["AuthType"] == "Key")
+      {
+        _cosmosDbClient = new(
+          accountEndpoint: configuration["CosmosDbEndpoint"],
+          authKeyOrResourceToken: configuration["CosmosDbKey"],
+          clientOptions: cosmosDbOptions
+        );
+      }
+      else
+      {
+        _cosmosDbClient = new(
+          accountEndpoint: configuration["CosmosDbEndpoint"],
+          tokenCredential: credential,
+          clientOptions: cosmosDbOptions
+        );
+      }
     }
 
     private async Task GetDatabaseOrCreateAsync()
@@ -131,6 +144,7 @@ namespace AudienceVoting.Data
       {
         foreach (var votedTeam in votesByVoter[voterId])
         {
+          bool resultExists = false;
           foreach (var existingResult in resultList)
           {
             if (existingResult != null)
@@ -138,13 +152,14 @@ namespace AudienceVoting.Data
               if (votedTeam.Id == existingResult.Team?.Id)
               {
                 existingResult.NumVotes++;
-              }
-              else
-              {
-                var newResult = new TeamVoteResult {  NumVotes = 1, Team = votedTeam };
-                resultList.Add(newResult);
+                resultExists = true;
               }
             }
+          }
+          if (!resultExists)
+          {
+            var newResult = new TeamVoteResult { NumVotes = 1, Team = votedTeam };
+            resultList.Add(newResult);
           }
         }
       }

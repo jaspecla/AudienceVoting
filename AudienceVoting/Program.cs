@@ -7,7 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<ITeamService, InMemoryTeamService>();
+//builder.Services.AddSingleton<ITeamService, InMemoryTeamService>();
+builder.Services.AddSingleton<ITeamService, CosmosDbTeamService>();
 
 var app = builder.Build();
 
