@@ -1,0 +1,27 @@
+﻿@page "/fullresults"
+@using AudienceVoting.Data
+<h3>Results by Voter</h3>
+
+@if(ResultsByVoter != null) {
+  @foreach(var voterId in ResultsByVoter.Keys) {
+    <div>@voterId voted for:</div>
+    @foreach(var team in ResultsByVoter[voterId]) {
+      <b>@team.Name</b><br />
+    }
+  }
+}
+
+@code {
+
+  [Inject]
+  protected ITeamService? TeamService { get; set; }
+
+  protected IDictionary<string, IList<Team>>? ResultsByVoter { get; set; }
+
+  protected override async Task OnInitializedAsync()
+  {
+    if (TeamService != null) {
+      ResultsByVoter = await TeamService.GetResultsByVoter();
+    }
+  }
+}

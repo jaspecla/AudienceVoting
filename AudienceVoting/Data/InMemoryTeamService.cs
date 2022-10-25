@@ -66,6 +66,11 @@
     {
       return _results.Values.OrderByDescending(result => result.NumVotes).ToList();
     }
+
+    public async Task<IDictionary<string, IList<Team>>> GetResultsByVoter()
+    {
+      return _teamVotes;
+    }
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
   }
