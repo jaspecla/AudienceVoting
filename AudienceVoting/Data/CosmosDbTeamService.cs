@@ -172,5 +172,34 @@ namespace AudienceVoting.Data
       }
 
     }
+
+    public async Task AddTeam(Team team)
+    {
+      await InitializeDatabaseAndContainersAsync();
+
+      if (string.IsNullOrEmpty(team.Id))
+      {
+        team.Id = Guid.NewGuid().ToString();
+      }
+
+      if (_teamsContainer != null)
+      {
+        await _teamsContainer.CreateItemAsync<Team>(
+          item: team,
+          partitionKey: new PartitionKey(team.Id)
+        );
+      }
+
+    }
+
+    public Task DeleteTeam(Team team)
+    {
+      throw new NotImplementedException();
+    }
+
+    public Task UpdateTeam(Team team)
+    {
+      throw new NotImplementedException();
+    }
   }
 }

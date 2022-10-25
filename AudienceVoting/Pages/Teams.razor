@@ -1,0 +1,45 @@
+﻿@page "/teams"
+
+<h3>Teams</h3>
+
+@if(TeamList != null) {
+  @foreach(var team in TeamList) {
+    <b>@team.Name</b> @team.OrdinalNumber<br />
+  }
+}
+
+<input @bind="TeamNameToAdd" /><input @bind="NewTeamOrdinal" /><br />
+<button @onclick="OnAddNewTeamButtonClickedAsync">Add New Team</button>
+
+@code {
+
+  [Inject]
+  protected ITeamService? TeamService { get; set; }
+
+  protected IList<Team>? TeamList { get; set; }
+
+  protected string? TeamNameToAdd { get; set; }
+  protected int NewTeamOrdinal { get; set; }
+
+  protected override async Task OnInitializedAsync()
+  {
+    if (TeamService != null)
+    {
+      TeamList = await TeamService.GetTeams();
+    }
+  }
+
+  private async Task OnAddNewTeamButtonClickedAsync() {
+    if (TeamService != null)
+    {
+      var newTeam = new Team
+        {
+          Id = Guid.NewGuid().ToString(),
+          Name = TeamNameToAdd,
+          OrdinalNumber = NewTeamOrdinal
+        };
+
+      await TeamService.AddTeam(newTeam);
+    }
+  }
+}

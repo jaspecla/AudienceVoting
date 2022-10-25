@@ -71,6 +71,33 @@
     {
       return _teamVotes;
     }
+
+    public async Task AddTeam(Team team)
+    {
+      if (string.IsNullOrEmpty(team.Id))
+      {
+        team.Id = Guid.NewGuid().ToString();
+      }
+
+      _teams.Add(team);
+    }
+
+    public async Task DeleteTeam(Team team)
+    {
+      _teams.Remove(team);
+    }
+
+    public async Task UpdateTeam(Team team)
+    {
+      var teamToUpdate = _teams.Where(existingTeam => existingTeam.Id == team.Id).FirstOrDefault();
+
+      if (teamToUpdate != null)
+      {
+        _teams.Remove(teamToUpdate);
+      }
+
+      _teams.Add(team);
+    }
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
   }
