@@ -1,0 +1,29 @@
+﻿@using AudienceVoting.Data
+
+@if (Team != null) {
+  <input type="checkbox" id="{@Team.Id}" name="{@Team.Id}" @onchange="OnVoteChanged" />
+  <label for="{@Team.Id}">@Team.Name</label>
+}
+
+@code {
+  [Parameter]
+  public Team? Team { get; set; }
+
+  [Parameter]
+  public EventCallback<Team> VoteChangedCallback { get; set; }
+
+  protected override void OnInitialized()
+  {
+    Team!.VotedFor = false;
+  }
+
+  private async Task OnVoteChanged() {
+
+    if (Team != null)
+    {
+      Team.VotedFor = !Team.VotedFor;
+      await VoteChangedCallback.InvokeAsync(Team);
+    }
+
+  }
+}

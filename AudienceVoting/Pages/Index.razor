@@ -1,0 +1,24 @@
+﻿@page "/"
+
+<PageTitle>Index</PageTitle>
+
+
+@if (!DidVote)
+{
+  <h1>Welcome to the QED Two-Prov Tournament Semifinals!</h1>
+  <h3>Please vote for <b>two</b> teams:</h3>
+
+  @if (Teams != null)
+  {
+    @foreach (var team in Teams)
+    {
+      <TeamBallotItem Team="@team" VoteChangedCallback="VoteChanged" /><br />
+    }
+    <button @onclick="SubmitVoteAsync" disabled=@(TeamsVotedFor.Count != NumVotesRequired)>Submit Your Vote</button>
+  }
+}
+else
+{
+    <h1>Thank you for voting in the QED Two-Prov Tournament Semifinals!</h1>
+}
+

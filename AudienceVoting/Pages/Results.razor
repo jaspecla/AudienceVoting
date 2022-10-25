@@ -1,0 +1,27 @@
+﻿@page "/results"
+@using AudienceVoting.Data
+<h3>Results</h3>
+
+@foreach(var result in VoteResults) {
+  <b>@result.Team!.Name: @result.NumVotes</b><br />
+}
+
+@code {
+
+  [Inject]
+  protected ITeamService? TeamService { get; set; }
+
+  protected IList<TeamVoteResult> VoteResults { get; set; }
+
+  public Results() {
+    VoteResults = new List<TeamVoteResult>();
+  }
+
+  protected override async Task OnInitializedAsync()
+  {
+    if (TeamService != null) 
+    {
+      VoteResults = await TeamService.GetVotingResults();
+    }
+  }
+}
