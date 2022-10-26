@@ -10,7 +10,7 @@ on:
 env:
   DOTNET_CONFIG: Release
   APP_NAME: audience-voting
-  AZURE_WEB_APP_NAME: audience-voting-webapp
+  AZURE_WEBAPP_NAME: audience-voting-webapp
 
 permissions:
       id-token: write
