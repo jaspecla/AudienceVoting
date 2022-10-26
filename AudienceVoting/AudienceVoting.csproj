@@ -8,6 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Deployment\audienceVoting.bicep" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Deployment\audienceVoting.bicep" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.7.0" />
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.31.0" />
   </ItemGroup>
