@@ -2,10 +2,10 @@
 {
   @if (!IsEditing)
   {
-    <b>@Team.Name</b> @Team.OrdinalNumber <button @onclick="OnEditButtonClicked">Edit Team</button> <button @onclick="OnDeleteButtonClickedAsync">Delete Team</button> <br />
+    <b>@Team.Name</b><button @onclick="OnEditButtonClicked">Edit Team</button> <button @onclick="OnDeleteButtonClickedAsync">Delete Team</button> <br />
   }
   else {
-    <input @bind="Team.Name" /> <input @bind="Team.OrdinalNumber" /> <button @onclick="OnSaveButtonClickedAsync">Save</button><br />
+    <input @bind="Team.Name" /><button @onclick="OnSaveButtonClickedAsync">Save</button><br />
   }
 }
 
