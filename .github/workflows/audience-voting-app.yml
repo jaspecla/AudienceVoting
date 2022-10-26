@@ -92,13 +92,6 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-    # Examine directory contents for debugging purposes
-    - name: 'Examine directory contents (debug)'
-      if: ${{ env.DEBUG == true }}
-      run: |
-        pwd
-        ls -alR
-
       # Deploy to Azure Web apps
     - name: 'Run Azure webapp deploy action'
       uses: azure/webapps-deploy@v2

@@ -1,6 +1,5 @@
 using AudienceVoting.Data;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using BlazorReorderList;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +8,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 //builder.Services.AddSingleton<ITeamService, InMemoryTeamService>();
 builder.Services.AddSingleton<ITeamService, CosmosDbTeamService>();
+
+builder.Services.AddScoped<IReorderService<Team>, ReorderService<Team>>();
 
 var app = builder.Build();
 
