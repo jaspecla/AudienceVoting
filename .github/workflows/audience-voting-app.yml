@@ -6,9 +6,15 @@ name: Build Audience Voting App and Deploy to Azure
 on:
   push:
     branches: [ "main" ]
+
 env:
   DOTNET_CONFIG: Release
   APP_NAME: audience-voting
+
+permissions:
+      id-token: write
+      contents: read
+
 jobs:
   build:
 
