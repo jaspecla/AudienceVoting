@@ -27,12 +27,12 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Publish
-      run: dotnet publish -c ${{ env.DOTNET_CONFIG }} -o ../${{ env.APP_NAME }}
+      run: dotnet publish -c ${{ env.DOTNET_CONFIG }} -o ${{ env.APP_NAME }}
     - name: Upload DotNet Artifact
       uses: actions/upload-artifact@v3.1.1
       with:
         name: application-binary
-        path: ../${{ env.APP_NAME }}
+        path: ${{ env.APP_NAME }}
     - name: Upload Bicep Deployment Files
       uses: actions/upload-artifact@v3.1.1
       with:
