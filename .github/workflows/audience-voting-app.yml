@@ -11,6 +11,7 @@ env:
   DOTNET_CONFIG: Release
   APP_NAME: audience-voting
   AZURE_WEBAPP_NAME: audience-voting-webapp
+  DEBUG: true
 
 permissions:
       id-token: write
@@ -93,6 +94,7 @@ jobs:
 
     # Examine directory contents for debugging purposes
     - name: 'Examine directory contents (debug)'
+      if: ${{ env.DEBUG == true }}
       run: |
         pwd
         ls -alR
@@ -102,6 +104,6 @@ jobs:
       uses: azure/webapps-deploy@v2
       with: 
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        package: ./${{ env.APP_NAME }}
+        package: .
 
         
