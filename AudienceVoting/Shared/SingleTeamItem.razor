@@ -1,0 +1,43 @@
+﻿@if (Team != null)
+{
+  @if (!IsEditing)
+  {
+    <b>@Team.Name</b> @Team.OrdinalNumber <button @onclick="OnEditButtonClicked">Edit Team</button> <button @onclick="OnDeleteButtonClickedAsync">Delete Team</button> <br />
+  }
+  else {
+    <input @bind="Team.Name" /> <input @bind="Team.OrdinalNumber" /> <button @onclick="OnSaveButtonClickedAsync">Save</button><br />
+  }
+}
+
+@code {
+
+  [Parameter]
+  public Team? Team { get; set; }
+
+  [Parameter]
+  public EventCallback<Team> TeamDeletedCallback { get; set; }
+
+  [Inject]
+  protected ITeamService? TeamService { get; set; }
+
+  private bool IsEditing = false;
+
+  private async Task OnDeleteButtonClickedAsync() {
+    if (Team != null && TeamService != null) {
+      await TeamService.DeleteTeam(Team);
+      await TeamDeletedCallback.InvokeAsync(Team);
+    }
+  }
+
+  private void OnEditButtonClicked() {
+    IsEditing = true;
+  }
+
+  private async Task OnSaveButtonClickedAsync() {
+    if (Team != null && TeamService != null) {
+      await TeamService.UpdateTeam(Team);
+      IsEditing = false;
+    }
+  }
+
+}

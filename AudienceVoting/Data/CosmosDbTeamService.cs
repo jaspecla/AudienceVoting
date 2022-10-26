@@ -207,14 +207,22 @@ namespace AudienceVoting.Data
 
     }
 
-    public Task DeleteTeam(Team team)
+    public async Task DeleteTeam(Team team)
     {
-      throw new NotImplementedException();
+      await InitializeDatabaseAndContainersAsync();
+      if (_teamsContainer != null)
+      {
+        await _teamsContainer.DeleteItemAsync<Team>(team.Id, new PartitionKey(team.Id));
+      }
     }
 
-    public Task UpdateTeam(Team team)
+    public async Task UpdateTeam(Team team)
     {
-      throw new NotImplementedException();
+      await InitializeDatabaseAndContainersAsync();
+      if (_teamsContainer != null)
+      {
+        await _teamsContainer.UpsertItemAsync<Team>(team, new PartitionKey(team.Id));
+      }
     }
   }
 }

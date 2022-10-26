@@ -4,7 +4,7 @@
 
 @if(TeamList != null) {
   @foreach(var team in TeamList) {
-    <b>@team.Name</b> @team.OrdinalNumber<br />
+    <SingleTeamItem Team="@team" TeamDeletedCallback="OnTeamWasDeleted" />
   }
 }
 
@@ -40,6 +40,12 @@
         };
 
       await TeamService.AddTeam(newTeam);
+    }
+  }
+
+  private void OnTeamWasDeleted(Team team) {
+    if (TeamList != null) {
+      TeamList.Remove(team);
     }
   }
 }
