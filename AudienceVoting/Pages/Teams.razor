@@ -40,6 +40,14 @@
         };
 
       await TeamService.AddTeam(newTeam);
+
+      if (TeamList != null)
+      {
+        TeamList.Add(newTeam);
+      }
+
+      TeamNameToAdd = null;
+      NewTeamOrdinal = 0;
     }
   }
 
