@@ -10,6 +10,7 @@ on:
 env:
   DOTNET_CONFIG: Release
   APP_NAME: audience-voting
+  AZURE_WEB_APP_NAME: audience-voting-webapp
 
 permissions:
       id-token: write
@@ -34,6 +35,8 @@ jobs:
       run: dotnet test --no-build --verbosity normal
     - name: Publish
       run: dotnet publish -c ${{ env.DOTNET_CONFIG }} -o ${{ env.APP_NAME }}
+# Upload the application binary and the deployment files 
+# as artifacts we can use in the next jobs
     - name: Upload DotNet Artifact
       uses: actions/upload-artifact@v3.1.1
       with:
@@ -45,7 +48,7 @@ jobs:
         name: bicep
         path: AudienceVoting/Deployment
       
-  job:
+  deploy_bicep:
     name: Deploy Infrastructure with Bicep
     runs-on: ubuntu-latest
     needs: build
@@ -67,7 +70,32 @@ jobs:
     - name: Run Bicep Deployment with Azure CLI
       uses: Azure/cli@v1
       with:
-        # Specify the script here
         inlineScript: |
           az deployment group create --resource-group ${{ env.DEPLOYMENT_RG }} --template-file audienceVoting.bicep
 
+  deploy_code:
+    name: Deploy App to App Service
+    runs-on: ubuntu-latest
+    needs: [build, deploy_bicep]
+
+    steps:
+    # Download the app binary we built in the first job
+    - name: Download compiled .NET binary
+      uses: actions/download-artifact@v3.0.1
+      with:
+        name: application-binary
+    - name: 'Azure login with OIDC'
+      uses: azure/login@v1
+      with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # Deploy to Azure Web apps
+    - name: 'Run Azure webapp deploy action'
+      uses: azure/webapps-deploy@v2
+      with: 
+        app-name: ${{ env.AZURE_WEBAPP_NAME }} # Replace with your app name
+        package: ${{ env.APP_NAME }}
+
+        
