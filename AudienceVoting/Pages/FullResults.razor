@@ -1,5 +1,6 @@
 ﻿@page "/fullresults"
 @using AudienceVoting.Data
+@attribute [Authorize]
 <h3>Results by Voter</h3>
 
 @if(ResultsByVoter != null) {
