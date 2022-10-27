@@ -107,8 +107,8 @@ jobs:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         app-settings-json: >-
          [
-          { "name": "AzureAd:TenantId", "value": "${{ secrets.AZURE_TENANT_ID }}", "slotSetting": false },
-          { "name": "AzureAd:ClientId", "value": "${{ secrets.AZURE_APP_CLIENT_ID }}", "slotSetting": false }
+          { "name": "AzureAd__TenantId", "value": "${{ secrets.AZURE_TENANT_ID }}", "slotSetting": false },
+          { "name": "AzureAd__ClientId", "value": "${{ secrets.AZURE_APP_CLIENT_ID }}", "slotSetting": false }
          ]
           
            
