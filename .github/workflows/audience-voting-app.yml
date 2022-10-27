@@ -11,7 +11,6 @@ env:
   DOTNET_CONFIG: Release
   APP_NAME: audience-voting
   AZURE_WEBAPP_NAME: audience-voting-webapp
-  DEBUG: true
 
 permissions:
       id-token: write
@@ -98,5 +97,19 @@ jobs:
       with: 
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         package: .
+
+      # Set the App Configuration to enable Azure AD Authentication
+      # Note that the AZURE_APP_CLIENT_ID is used for the App registration for the app itself,
+      # while AZURE_CLIENT_ID is the app registration for the GitHub Actions deployment
+    - name: 'Configure Azure AD for App Service'
+      uses: azure/appservice-settings@1
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        app-settings-json: |
+         [{ "name": "AzureAd:TenantId", "value": "${{ secrets.AZURE_TENANT_ID }}", "slotSetting": false }]
+         [{ "name": "AzureAd:ClientId", "value": "${{ secrets.AZURE_APP_CLIENT_ID }}", "slotSetting": false }]
+          
+           
+
 
         
