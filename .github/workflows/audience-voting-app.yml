@@ -102,7 +102,7 @@ jobs:
       # Note that the AZURE_APP_CLIENT_ID is used for the App registration for the app itself,
       # while AZURE_CLIENT_ID is the app registration for the GitHub Actions deployment
     - name: 'Configure Azure AD for App Service'
-      uses: azure/appservice-settings@1
+      uses: azure/appservice-settings@v1
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         app-settings-json: |
