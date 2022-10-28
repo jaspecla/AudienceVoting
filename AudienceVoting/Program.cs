@@ -6,6 +6,7 @@ using Microsoft.Identity.Web.UI;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Blazored.LocalStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,9 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor()
     .AddMicrosoftIdentityConsentHandler();
 //builder.Services.AddSingleton<ITeamService, InMemoryTeamService>();
+
+builder.Services.AddBlazoredLocalStorage();
+
 builder.Services.AddSingleton<ITeamService, CosmosDbTeamService>();
 
 builder.Services.AddScoped<IReorderService<Team>, ReorderService<Team>>();
