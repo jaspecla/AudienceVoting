@@ -1,4 +1,5 @@
 ﻿using AudienceVoting.Data;
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 
 namespace AudienceVoting.Pages
@@ -8,6 +9,9 @@ namespace AudienceVoting.Pages
 
     [Inject]
     protected ITeamService? TeamService { get; set; }
+    [Inject]
+    protected ILocalStorageService? LocalStorageService { get; set; }
+
     protected IList<Team>? Teams { get; set; }
     protected IList<Team> TeamsVotedFor { get; set; }
     protected bool DidVote = false;
@@ -23,6 +27,21 @@ namespace AudienceVoting.Pages
     protected override async Task OnInitializedAsync()
     {
       Teams = await TeamService!.GetTeams();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+      if (LocalStorageService != null)
+      {
+        var previousVote = await LocalStorageService.GetItemAsync<string>("vote");
+        
+        // This person has voted before
+        if (!string.IsNullOrEmpty(previousVote))
+        {
+          DidVote = true;
+          StateHasChanged();
+        }
+      }
     }
 
     private void VoteChanged(Team team)
@@ -51,6 +70,12 @@ namespace AudienceVoting.Pages
         await TeamService!.SubmitVote(VoterId, TeamsVotedFor);
         TeamsVotedFor = new List<Team>();
         DidVote = true;
+
+        if (LocalStorageService != null)
+        {
+          await LocalStorageService.SetItemAsync<string>("vote", VoterId);
+        }
+
       }
     }
   }
