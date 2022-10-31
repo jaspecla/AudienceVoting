@@ -4,12 +4,19 @@
 
 <h3>Teams</h3>
 
-<Reorder Items="TeamList" TItem="Team" OnFinish="OnTeamOrderChanged">
-    <SingleTeamItem Team="@context" TeamDeletedCallback="OnTeamWasDeleted" />
-</Reorder>
+<AuthorizeView>
+  <Authorized>
+    <Reorder Items="TeamList" TItem="Team" OnFinish="OnTeamOrderChanged" Context="reorderContext">
+        <SingleTeamItem Team="@reorderContext" TeamDeletedCallback="OnTeamWasDeleted" />
+    </Reorder>
+    <input @bind="TeamNameToAdd" /><br />
+    <button @onclick="OnAddNewTeamButtonClickedAsync">Add New Team</button>
+  </Authorized>
+  <NotAuthorized>
+    <b>You do not have permission to edit the list of teams.</b>
+  </NotAuthorized>
+</AuthorizeView>
 
-<input @bind="TeamNameToAdd" /><br />
-<button @onclick="OnAddNewTeamButtonClickedAsync">Add New Team</button>
 
 @code {
 

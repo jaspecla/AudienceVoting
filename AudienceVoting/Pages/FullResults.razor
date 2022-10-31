@@ -3,14 +3,21 @@
 @attribute [Authorize]
 <h3>Results by Voter</h3>
 
-@if(ResultsByVoter != null) {
-  @foreach(var voterId in ResultsByVoter.Keys) {
-    <div>@voterId voted for:</div>
-    @foreach(var team in ResultsByVoter[voterId]) {
-      <b>@team.Name</b><br />
+<AuthorizeView>
+  <Authorized>
+    @if(ResultsByVoter != null) {
+      @foreach(var voterId in ResultsByVoter.Keys) {
+        <div>@voterId voted for:</div>
+        @foreach(var team in ResultsByVoter[voterId]) {
+          <b>@team.Name</b><br />
+        }
+      }
     }
-  }
-}
+  </Authorized>
+  <NotAuthorized>
+    <b>You do not have permission to view the results by voter.</b>
+  </NotAuthorized>
+</AuthorizeView>
 
 @code {
 

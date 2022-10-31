@@ -2,9 +2,16 @@
 @attribute [Authorize]
 <h3>Results</h3>
 
-@foreach(var result in VoteResults) {
-  <b>@result.Team!.Name: @result.NumVotes</b><br />
-}
+<AuthorizeView>
+  <Authorized>
+    @foreach(var result in VoteResults) {
+      <b>@result.Team!.Name: @result.NumVotes</b><br />
+    }
+  </Authorized>
+  <NotAuthorized>
+    <b>You do not have permission to view the voting results.</b>
+  </NotAuthorized>
+</AuthorizeView>
 
 @code {
 
