@@ -9,7 +9,6 @@ namespace AudienceVoting.Data
     private CosmosClient _client;
     private Database? _database;
     private int _defaultThroughput = 400;
-    private bool _didInitializeDb = false;
 
     private Dictionary<string, Container> _containers;
 

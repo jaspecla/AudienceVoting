@@ -10,6 +10,8 @@ namespace AudienceVoting.Pages
     [Inject]
     protected ITeamService? TeamService { get; set; }
     [Inject]
+    protected IVoteService? VoteService { get; set; }
+    [Inject]
     protected ILocalStorageService? LocalStorageService { get; set; }
 
     protected IList<Team>? Teams { get; set; }
@@ -67,7 +69,7 @@ namespace AudienceVoting.Pages
     {
       if (!DidVote)
       {
-        await TeamService!.SubmitVote(VoterId, TeamsVotedFor);
+        await VoteService!.SubmitVote(VoterId, TeamsVotedFor);
         TeamsVotedFor = new List<Team>();
         DidVote = true;
 
