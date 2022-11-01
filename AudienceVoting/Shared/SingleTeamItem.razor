@@ -3,12 +3,20 @@
   @if (!IsEditing)
   {
     <b>@Team.Name</b>
-    <button @onclick="OnEditButtonClicked">Edit Team</button>
-    <button @onclick="OnDeleteButtonClickedAsync">Delete Team</button>
+    <button enabled="@(!IsDeleting)" @onclick="OnEditButtonClicked" aria-label="Edit">
+      <span class="oi oi-pencil" aria-hidden="true"></span>
+    </button>
+    <button enabled="@(!IsDeleting)" @onclick="OnDeleteButtonClickedAsync" aria-label="Delete">
+      <span class="oi oi-trash" aria-hidden="true"></span>
+    </button>
     <br />
   }
   else {
-    <input @bind="Team.Name" /><button @onclick="OnSaveButtonClickedAsync">Save</button><br />
+    <form @onsubmit="OnSaveButtonClickedAsync">
+      <input @bind="Team.Name" />
+      <button type="submit" aria-label="Save"><span class="oi oi-check" aria-hidden="true"></span></button>
+      <br />
+    </form>
   }
 }
 
@@ -24,11 +32,14 @@
   protected ITeamService? TeamService { get; set; }
 
   private bool IsEditing = false;
+  private bool IsDeleting = false;
 
   private async Task OnDeleteButtonClickedAsync() {
     if (Team != null && TeamService != null) {
+      IsDeleting = true;
       await TeamService.DeleteTeam(Team);
       await TeamDeletedCallback.InvokeAsync(Team);
+      IsDeleting = false;
     }
   }
 
