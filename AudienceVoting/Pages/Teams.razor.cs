@@ -11,34 +11,21 @@ namespace AudienceVoting.Pages
     protected List<Team> TeamList { get; set; }
 
     protected string? TeamNameToAdd { get; set; }
+    protected string? SelectedEventId { get; set; }
 
     public Teams()
     {
       TeamList = new List<Team>();
     }
 
-    protected override async Task OnInitializedAsync()
-    {
-      if (TeamService != null)
-      {
-        // We need to convert from IList<T> to List<T> because the Reorder component
-        // only accepts List<T>
-        var teamsFromService = await TeamService.GetTeams();
-
-        foreach (var team in teamsFromService)
-        {
-          TeamList.Add(team);
-        }
-      }
-    }
-
     private async Task OnAddNewTeamButtonClickedAsync()
     {
-      if (TeamService != null)
+      if (TeamService != null && SelectedEventId != null)
       {
         var newTeam = new Team
         {
           Id = Guid.NewGuid().ToString(),
+          EventId = SelectedEventId,
           Name = TeamNameToAdd,
           OrdinalNumber = TeamList.Count
         };
@@ -74,6 +61,25 @@ namespace AudienceVoting.Pages
           await TeamService.UpdateTeam(team);
         }
       }
+    }
+
+    private async Task OnSelectedVotingEventChanged(string votingEventId)
+    {
+      if (TeamService != null)
+      {
+        //We need to convert from IList<T> to List < T > because the Reorder component
+        //only accepts List<T>
+
+        SelectedEventId = votingEventId;
+        var teamsFromService = await TeamService.GetTeamsForEvent(votingEventId);
+
+        TeamList = new List<Team>();
+        foreach (var team in teamsFromService)
+        {
+          TeamList.Add(team);
+        }
+      }
+
     }
   }
 

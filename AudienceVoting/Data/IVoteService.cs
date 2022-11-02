@@ -2,8 +2,8 @@
 {
   public interface IVoteService
   {
-    Task SubmitVote(string voterId, IList<Team> teamsVotedFor);
-    Task<IList<TeamVoteResult>> GetVotingResults();
-    Task<IDictionary<string, IList<Team>>> GetResultsByVoter();
+    Task SubmitVote(string voterId, string eventId, IList<Team> teamsVotedFor);
+    Task<IList<TeamVoteResult>> GetEventVotingResults(string eventId);
+    Task<IDictionary<string, IList<Team>>> GetEventResultsByVoter(string eventId);
   }
 }

@@ -6,6 +6,7 @@
 
 <AuthorizeView>
   <Authorized>
+    <EventSelector EventChangedCallback="OnSelectedVotingEventChanged" />
     <Reorder Items="TeamList" TItem="Team" OnFinish="OnTeamOrderChanged" Context="reorderContext">
         <SingleTeamItem Team="@reorderContext" TeamDeletedCallback="OnTeamWasDeleted" />
     </Reorder>

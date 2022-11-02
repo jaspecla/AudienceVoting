@@ -4,6 +4,7 @@
 
 <AuthorizeView>
   <Authorized>
+    <EventSelector EventChangedCallback="OnSelectedEventChangedAsync" />
     @foreach(var result in VoteResults) {
       <b>@result.Team!.Name: @result.NumVotes</b><br />
     }

@@ -15,22 +15,24 @@ namespace AudienceVoting.Data
     }
 
 
-    public async Task<IList<Team>> GetTeams()
+    public async Task<IList<Team>> GetTeamsForEvent(string eventId)
     {
       var teamsContainer = await _containerService.GetContainerOrCreateAsync(_teamsContainerName);
 
-      using FeedIterator<Team> feed = teamsContainer.GetItemQueryIterator<Team>(
-        queryText: $"SELECT * FROM {_teamsContainerName} t ORDER BY t.ordinalNumber"
-      );
+      var query = new QueryDefinition($"SELECT * FROM {_teamsContainerName} t WHERE t.eventId = @eventId ORDER BY t.ordinalNumber")
+        .WithParameter("@eventId", eventId);
 
       var resultList = new List<Team>();
-      while (feed.HasMoreResults)
-      {
-        FeedResponse<Team> response = await feed.ReadNextAsync();
+      using (FeedIterator<Team> feed = teamsContainer.GetItemQueryIterator<Team>(query)) {
 
-        foreach (var result in response)
+        while (feed.HasMoreResults)
         {
-          resultList.Add(result);
+          FeedResponse<Team> response = await feed.ReadNextAsync();
+
+          foreach (var result in response)
+          {
+            resultList.Add(result);
+          }
         }
       }
 
@@ -44,6 +46,11 @@ namespace AudienceVoting.Data
       if (string.IsNullOrEmpty(team.Id))
       {
         team.Id = Guid.NewGuid().ToString();
+      }
+
+      if (string.IsNullOrEmpty(team.EventId))
+      {
+        throw new ArgumentNullException("team.EventId");
       }
 
       var teamsContainer = await _containerService.GetContainerOrCreateAsync(_teamsContainerName);

@@ -14,25 +14,27 @@ namespace AudienceVoting.Data
       _containerService = containerService;
     }
 
-    public async Task<IDictionary<string, IList<Team>>> GetResultsByVoter()
+    public async Task<IDictionary<string, IList<Team>>> GetEventResultsByVoter(string eventId)
     {
 
       var votesContainer = await _containerService.GetContainerOrCreateAsync(_votesContainerName);
 
-      using FeedIterator<VoterVoteResult> feed = votesContainer.GetItemQueryIterator<VoterVoteResult>(
-        queryText: $"SELECT * FROM {_votesContainerName}"
-      );
+      var query = new QueryDefinition($"SELECT * FROM {_votesContainerName} v WHERE v.eventId = @eventId")
+        .WithParameter("@eventId", eventId);
 
       var resultDictionary = new Dictionary<string, IList<Team>>();
-      while (feed.HasMoreResults)
+      using (FeedIterator<VoterVoteResult> feed = votesContainer.GetItemQueryIterator<VoterVoteResult>(query))
       {
-        FeedResponse<VoterVoteResult> response = await feed.ReadNextAsync();
-
-        foreach (var result in response)
+        while (feed.HasMoreResults)
         {
-          if (result.Id != null && result.TeamsVotedFor != null)
+          FeedResponse<VoterVoteResult> response = await feed.ReadNextAsync();
+
+          foreach (var result in response)
           {
-            resultDictionary.Add(result.Id, result.TeamsVotedFor);
+            if (result.Id != null && result.TeamsVotedFor != null)
+            {
+              resultDictionary.Add(result.Id, result.TeamsVotedFor);
+            }
           }
         }
       }
@@ -40,11 +42,11 @@ namespace AudienceVoting.Data
       return resultDictionary;
     }
 
-    public async Task<IList<TeamVoteResult>> GetVotingResults()
+    public async Task<IList<TeamVoteResult>> GetEventVotingResults(string eventId)
     {
       var resultList = new List<TeamVoteResult>();
 
-      var votesByVoter = await GetResultsByVoter();
+      var votesByVoter = await GetEventResultsByVoter(eventId);
 
       foreach (var voterId in votesByVoter.Keys)
       {
@@ -74,11 +76,12 @@ namespace AudienceVoting.Data
 
     }
 
-    public async Task SubmitVote(string voterId, IList<Team> teamsVotedFor)
+    public async Task SubmitVote(string voterId, string eventId, IList<Team> teamsVotedFor)
     {
       var voterResult = new VoterVoteResult
       {
         Id = voterId,
+        EventId = eventId,
         TeamsVotedFor = teamsVotedFor
       };
 
@@ -90,8 +93,5 @@ namespace AudienceVoting.Data
       );
 
     }
-
-
-
   }
 }

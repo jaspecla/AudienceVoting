@@ -2,23 +2,30 @@
 
 <PageTitle>Index</PageTitle>
 
-
-@if (!DidVote)
+@if (ActiveEvent != null)
 {
-  <h1>Welcome to the <b>QED</b> Two-Prov Tournament Semifinals!</h1>
-  <h3>Please vote for <b>two</b> teams:</h3>
-
-  @if (Teams != null)
+  @if (!DidVote)
   {
-    @foreach (var team in Teams)
+    <h1>Welcome to @ActiveEvent.Name</h1>
+    <h3>Please vote for <b>@ActiveEvent.NumTeamsToVoteFor</b> teams:</h3>
+
+    @if (Teams != null)
     {
-      <TeamBallotItem Team="@team" VoteChangedCallback="VoteChanged" /><br />
+      @foreach (var team in Teams)
+      {
+        <TeamBallotItem Team="@team" VoteChangedCallback="VoteChanged" /><br />
+      }
+      <button @onclick="SubmitVoteAsync" disabled=@(TeamsVotedFor.Count != ActiveEvent.NumTeamsToVoteFor)>Submit Your Vote</button>
     }
-    <button @onclick="SubmitVoteAsync" disabled=@(TeamsVotedFor.Count != NumVotesRequired)>Submit Your Vote</button>
+
+  }
+  else
+  {
+    <h1>Thank you for voting in the QED Two-Prov Tournament Semifinals!</h1>
   }
 }
-else
+else 
 {
-    <h1>Thank you for voting in the QED Two-Prov Tournament Semifinals!</h1>
+  <h1>There is no current active event in which to vote.</h1>
 }
 

@@ -12,13 +12,15 @@ namespace AudienceVoting.Pages
     [Inject]
     protected IVoteService? VoteService { get; set; }
     [Inject]
+    protected IEventService? EventService { get; set; }
+    [Inject]
     protected ILocalStorageService? LocalStorageService { get; set; }
 
+    protected VotingEvent? ActiveEvent { get; set; }
     protected IList<Team>? Teams { get; set; }
     protected IList<Team> TeamsVotedFor { get; set; }
     protected bool DidVote = false;
 
-    private int NumVotesRequired = 2;
     private string VoterId { get; set; }
 
     public Index()
@@ -28,14 +30,19 @@ namespace AudienceVoting.Pages
     }
     protected override async Task OnInitializedAsync()
     {
-      Teams = await TeamService!.GetTeams();
+      ActiveEvent = await EventService!.GetCurrentActiveEvent();
+
+      if (ActiveEvent != null && ActiveEvent.Id != null)
+      {
+        Teams = await TeamService!.GetTeamsForEvent(ActiveEvent.Id);
+      }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-      if (LocalStorageService != null)
+      if (LocalStorageService != null && ActiveEvent != null)
       {
-        var previousVote = await LocalStorageService.GetItemAsync<string>("vote");
+        var previousVote = await LocalStorageService.GetItemAsync<string>($"vote-{ActiveEvent.Id}");
         
         // This person has voted before
         if (!string.IsNullOrEmpty(previousVote))
@@ -67,15 +74,15 @@ namespace AudienceVoting.Pages
 
     private async Task SubmitVoteAsync()
     {
-      if (!DidVote)
+      if (!DidVote && ActiveEvent != null && !string.IsNullOrEmpty(ActiveEvent.Id))
       {
-        await VoteService!.SubmitVote(VoterId, TeamsVotedFor);
+        await VoteService!.SubmitVote(VoterId, ActiveEvent.Id, TeamsVotedFor);
         TeamsVotedFor = new List<Team>();
         DidVote = true;
 
         if (LocalStorageService != null)
         {
-          await LocalStorageService.SetItemAsync<string>("vote", VoterId);
+          await LocalStorageService.SetItemAsync<string>($"vote-{ActiveEvent.Id}", VoterId);
         }
 
       }
