@@ -2,56 +2,22 @@
 {
   @if (!IsEditing)
   {
-    <b>@Team.Name</b>
-    <button enabled="@(!IsDeleting)" @onclick="OnEditButtonClicked" aria-label="Edit">
-      <span class="oi oi-pencil" aria-hidden="true"></span>
-    </button>
-    <button enabled="@(!IsDeleting)" @onclick="OnDeleteButtonClickedAsync" aria-label="Delete">
-      <span class="oi oi-trash" aria-hidden="true"></span>
-    </button>
-    <br />
+    <div class="row">
+      <div class="col">@Team.Name</div>
+      <div class="col">
+        <button enabled="@(!IsDeleting)" @onclick="OnEditButtonClicked" aria-label="Edit">
+          <span class="oi oi-pencil" aria-hidden="true"></span>
+        </button>
+        <button enabled="@(!IsDeleting)" @onclick="OnDeleteButtonClickedAsync" aria-label="Delete">
+          <span class="oi oi-trash" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
   }
   else {
-    <form @onsubmit="OnSaveButtonClickedAsync">
-      <input @bind="Team.Name" />
+    <form class="form-inline" @onsubmit="OnSaveButtonClickedAsync">
+      <input type="text" @bind="Team.Name" />
       <button type="submit" aria-label="Save"><span class="oi oi-check" aria-hidden="true"></span></button>
-      <br />
     </form>
   }
-}
-
-@code {
-
-  [Parameter]
-  public Team? Team { get; set; }
-
-  [Parameter]
-  public EventCallback<Team> TeamDeletedCallback { get; set; }
-
-  [Inject]
-  protected ITeamService? TeamService { get; set; }
-
-  private bool IsEditing = false;
-  private bool IsDeleting = false;
-
-  private async Task OnDeleteButtonClickedAsync() {
-    if (Team != null && TeamService != null) {
-      IsDeleting = true;
-      await TeamService.DeleteTeam(Team);
-      await TeamDeletedCallback.InvokeAsync(Team);
-      IsDeleting = false;
-    }
-  }
-
-  private void OnEditButtonClicked() {
-    IsEditing = true;
-  }
-
-  private async Task OnSaveButtonClickedAsync() {
-    if (Team != null && TeamService != null) {
-      await TeamService.UpdateTeam(Team);
-      IsEditing = false;
-    }
-  }
-
 }

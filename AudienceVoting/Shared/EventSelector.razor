@@ -1,0 +1,19 @@
+﻿<div>
+  <label for="event-select">Select an Event:</label>
+  <select class="form-select-sm" @onchange="OnSelectedVotingEventChangedAsync" name="events" id="event-select">
+    @if (AllEvents != null)
+    {
+      @foreach (var votingEvent in AllEvents)
+      {
+        @if (votingEvent.IsActive)
+        {
+          <option value="@votingEvent.Id" selected>@votingEvent.Name (Active)</option>
+        }
+        else
+        {
+          <option value="@votingEvent.Id">@votingEvent.Name</option>
+        }
+      }
+    }
+  </select>
+</div>

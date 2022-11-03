@@ -5,6 +5,7 @@
 
 <AuthorizeView>
   <Authorized>
+    <EventSelector EventChangedCallback="OnSelectedEventChangedAsync" />
     @if(ResultsByVoter != null) {
       @foreach(var voterId in ResultsByVoter.Keys) {
         <div>@voterId voted for:</div>
@@ -18,18 +19,3 @@
     <b>You do not have permission to view the results by voter.</b>
   </NotAuthorized>
 </AuthorizeView>
-
-@code {
-
-  [Inject]
-  protected ITeamService? TeamService { get; set; }
-
-  protected IDictionary<string, IList<Team>>? ResultsByVoter { get; set; }
-
-  protected override async Task OnInitializedAsync()
-  {
-    if (TeamService != null) {
-      ResultsByVoter = await TeamService.GetResultsByVoter();
-    }
-  }
-}

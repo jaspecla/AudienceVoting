@@ -27,11 +27,13 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor()
     .AddMicrosoftIdentityConsentHandler();
-//builder.Services.AddSingleton<ITeamService, InMemoryTeamService>();
 
 builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddSingleton<ITeamService, CosmosDbTeamService>();
+builder.Services.AddSingleton<IVoteService, CosmosDbVoteService>();
+builder.Services.AddSingleton<IEventService, CosmosDbEventService>();
+builder.Services.AddSingleton<CosmosDbContainerService>();
 
 builder.Services.AddScoped<IReorderService<Team>, ReorderService<Team>>();
 

@@ -4,6 +4,7 @@
 
 <AuthorizeView>
   <Authorized>
+    <EventSelector EventChangedCallback="OnSelectedEventChangedAsync" />
     @foreach(var result in VoteResults) {
       <b>@result.Team!.Name: @result.NumVotes</b><br />
     }
@@ -12,23 +13,3 @@
     <b>You do not have permission to view the voting results.</b>
   </NotAuthorized>
 </AuthorizeView>
-
-@code {
-
-  [Inject]
-  protected ITeamService? TeamService { get; set; }
-
-  protected IList<TeamVoteResult> VoteResults { get; set; }
-
-  public Results() {
-    VoteResults = new List<TeamVoteResult>();
-  }
-
-  protected override async Task OnInitializedAsync()
-  {
-    if (TeamService != null) 
-    {
-      VoteResults = await TeamService.GetVotingResults();
-    }
-  }
-}
