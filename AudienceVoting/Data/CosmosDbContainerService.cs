@@ -8,7 +8,6 @@ namespace AudienceVoting.Data
     private string _databaseName = "AudienceVoting";
     private CosmosClient _client;
     private Database? _database;
-    private int _defaultThroughput = 400;
 
     private Dictionary<string, Container> _containers;
 
@@ -49,7 +48,7 @@ namespace AudienceVoting.Data
         _database = await GetDatabaseOrCreateAsync();
       }
 
-      ContainerResponse response = await _database.CreateContainerIfNotExistsAsync(id: containerName, partitionKeyPath: "/id", throughput: _defaultThroughput);
+      ContainerResponse response = await _database.CreateContainerIfNotExistsAsync(id: containerName, partitionKeyPath: "/id");
 
       _containers.Add(containerName, response.Container);
 
