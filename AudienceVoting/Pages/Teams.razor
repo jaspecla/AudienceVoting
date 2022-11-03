@@ -6,18 +6,19 @@
 
 <AuthorizeView>
   <Authorized>
+    <div class="container-fluid">
     <EventSelector EventChangedCallback="OnSelectedVotingEventChanged" />
-    <Reorder Items="TeamList" TItem="Team" OnFinish="OnTeamOrderChanged" Context="reorderContext">
-        <SingleTeamItem Team="@reorderContext" TeamDeletedCallback="OnTeamWasDeleted" />
-    </Reorder>
-    <hr />
-    <b>Add a New Team:</b>
-    <form @onsubmit="OnAddNewTeamButtonClickedAsync">
-    <input @bind="TeamNameToAdd" />
-    <button type="submit" aria-label="New">
-      <span class="oi oi-plus" aria-hidden="true"></span>
-    </button>
-    </form>
+      <Reorder Items="TeamList" TItem="Team" OnFinish="OnTeamOrderChanged" Context="reorderContext">
+          <SingleTeamItem Team="@reorderContext" TeamDeletedCallback="OnTeamWasDeleted" />
+      </Reorder>
+      <b>Add a New Team:</b>
+      <form @onsubmit="OnAddNewTeamButtonClickedAsync">
+        <input @bind="TeamNameToAdd" />
+        <button type="submit" aria-label="New">
+          <span class="oi oi-plus" aria-hidden="true"></span>
+        </button>
+      </form>
+    </div>
   </Authorized>
   <NotAuthorized>
     <b>You do not have permission to edit the list of teams.</b>

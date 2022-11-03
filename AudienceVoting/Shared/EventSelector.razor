@@ -1,6 +1,6 @@
 ﻿<div>
   <label for="event-select">Select an Event:</label>
-  <select @onchange="OnSelectedVotingEventChangedAsync" name="events" id="event-select">
+  <select class="form-select-sm" @onchange="OnSelectedVotingEventChangedAsync" name="events" id="event-select">
     @if (AllEvents != null)
     {
       @foreach (var votingEvent in AllEvents)

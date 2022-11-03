@@ -2,20 +2,22 @@
 {
   @if (!IsEditing)
   {
-    <b>@Team.Name</b>
-    <button enabled="@(!IsDeleting)" @onclick="OnEditButtonClicked" aria-label="Edit">
-      <span class="oi oi-pencil" aria-hidden="true"></span>
-    </button>
-    <button enabled="@(!IsDeleting)" @onclick="OnDeleteButtonClickedAsync" aria-label="Delete">
-      <span class="oi oi-trash" aria-hidden="true"></span>
-    </button>
-    <br />
+    <div class="row">
+      <div class="col">@Team.Name</div>
+      <div class="col">
+        <button enabled="@(!IsDeleting)" @onclick="OnEditButtonClicked" aria-label="Edit">
+          <span class="oi oi-pencil" aria-hidden="true"></span>
+        </button>
+        <button enabled="@(!IsDeleting)" @onclick="OnDeleteButtonClickedAsync" aria-label="Delete">
+          <span class="oi oi-trash" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
   }
   else {
-    <form @onsubmit="OnSaveButtonClickedAsync">
-      <input @bind="Team.Name" />
+    <form class="form-inline" @onsubmit="OnSaveButtonClickedAsync">
+      <input type="text" @bind="Team.Name" />
       <button type="submit" aria-label="Save"><span class="oi oi-check" aria-hidden="true"></span></button>
-      <br />
     </form>
   }
 }
