@@ -1,0 +1,32 @@
+﻿@if (EventItem != null)
+{
+  @if (!IsEditing)
+  {
+    <b>@EventItem.Name</b> <b>Vote for: </b> @EventItem.NumTeamsToVoteFor
+    @if (EventItem.IsActive)
+    {
+      <span class="oi oi-star"></span>
+    }
+    else 
+    {
+      <button enabled="@(!IsDeleting)" @onclick="OnMakeActiveButtonClickedAsync" aria-label="Make Active">
+        Make Active Event
+      </button>
+    }
+    <button enabled="@(!IsDeleting)" @onclick="OnEditButtonClicked" aria-label="Edit">
+      <span class="oi oi-pencil" aria-hidden="true"></span>
+    </button>
+    <button enabled="@(!IsDeleting)" @onclick="OnDeleteButtonClickedAsync" aria-label="Delete">
+      <span class="oi oi-trash" aria-hidden="true"></span>
+    </button>
+    <br />
+  }
+  else
+  {
+    <form @onsubmit="OnSaveButtonClickedAsync">
+      Event Name: <input @bind="EventItem.Name" /> Vote for: <input type="number" min="1" @bind="EventItem.NumTeamsToVoteFor" />
+      <button type="submit" aria-label="Save"><span class="oi oi-check" aria-hidden="true"></span></button>
+      <br />
+    </form>
+  }
+}

@@ -7,5 +7,6 @@
     Task AddEvent(VotingEvent newEvent);
     Task SetActiveEvent(VotingEvent eventToActivate);
     Task DeleteEvent(VotingEvent eventToDelete);
+    Task UpdateEvent(VotingEvent eventToUpdate);
   }
 }

@@ -129,5 +129,12 @@ namespace AudienceVoting.Data
       await eventContainer.DeleteItemAsync<VotingEvent>(eventToDelete.Id, new PartitionKey(eventToDelete.Id));
     }
 
+    public async Task UpdateEvent(VotingEvent eventToUpdate)
+    {
+      var teamsContainer = await _containerService.GetContainerOrCreateAsync(_eventContainerName);
+      await teamsContainer.UpsertItemAsync<VotingEvent>(eventToUpdate, new PartitionKey(eventToUpdate.Id));
+    }
+
+
   }
 }
