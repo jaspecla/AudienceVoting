@@ -2,10 +2,13 @@
 {
   @if (!IsEditing)
   {
-    <b>@EventItem.Name</b> <b>Vote for: </b> @EventItem.NumTeamsToVoteFor
+    <div class="row">
+    <div class="col"><b>@EventItem.Name</b></div> 
+    <div class="col">Vote for: @EventItem.NumTeamsToVoteFor</div>
+    <div class="col">
     @if (EventItem.IsActive)
     {
-      <span class="oi oi-star"></span>
+      <span>Active</span>
     }
     else 
     {
@@ -13,20 +16,23 @@
         Make Active Event
       </button>
     }
+    </div>
+    <div class="col">
     <button enabled="@(!IsDeleting)" @onclick="OnEditButtonClicked" aria-label="Edit">
       <span class="oi oi-pencil" aria-hidden="true"></span>
     </button>
     <button enabled="@(!IsDeleting)" @onclick="OnDeleteButtonClickedAsync" aria-label="Delete">
       <span class="oi oi-trash" aria-hidden="true"></span>
     </button>
-    <br />
+    </div>
+    </div>
   }
   else
   {
-    <form @onsubmit="OnSaveButtonClickedAsync">
-      Event Name: <input @bind="EventItem.Name" /> Vote for: <input type="number" min="1" @bind="EventItem.NumTeamsToVoteFor" />
-      <button type="submit" aria-label="Save"><span class="oi oi-check" aria-hidden="true"></span></button>
-      <br />
+    <form class="form-inline" @onsubmit="OnSaveButtonClickedAsync">
+        <input type="text" id="eventName" @bind="EventItem.Name" />
+        <input id="eventNumVotes" type="number" min="1" @bind="EventItem.NumTeamsToVoteFor" />
+        <button type="submit" aria-label="Save"><span class="oi oi-check" aria-hidden="true"></span></button>
     </form>
   }
 }
